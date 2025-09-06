@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import { Button, Container, Title, Text, Stack, Card, Alert, Group, Loader } from "@mantine/core";
 import { useRouter } from "next/navigation";
+import { createInterviewRoom, generateSessionId } from "@/lib/daily";
 
 export default function SetupPage() {
   const router = useRouter();
@@ -12,6 +13,7 @@ export default function SetupPage() {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>("");
   const [stream, setStream] = useState<MediaStream | null>(null);
+  const [creatingRoom, setCreatingRoom] = useState<boolean>(false);
 
   useEffect(() => {
     checkPermissions();
@@ -48,11 +50,37 @@ export default function SetupPage() {
     }
   };
 
-  const startInterview = () => {
-    if (stream) {
-      stream.getTracks().forEach(track => track.stop());
+  const startInterview = async () => {
+    try {
+      setCreatingRoom(true);
+      setError("");
+
+      // Create Daily.co room
+      const sessionId = generateSessionId();
+      const roomResponse = await createInterviewRoom(sessionId);
+
+      if (!roomResponse.success) {
+        throw new Error(roomResponse.error || 'Failed to create interview room');
+      }
+
+      // Clean up local stream before navigating
+      if (stream) {
+        stream.getTracks().forEach(track => track.stop());
+      }
+
+      // Navigate to interview room with room URL
+      const params = new URLSearchParams({
+        roomUrl: roomResponse.room.url,
+        sessionId: roomResponse.room.sessionId,
+      });
+      
+      router.push(`/interview/room?${params.toString()}`);
+    } catch (error) {
+      console.error('Failed to start interview:', error);
+      setError(error instanceof Error ? error.message : 'Failed to start interview');
+    } finally {
+      setCreatingRoom(false);
     }
-    router.push('/interview/room');
   };
 
   return (
@@ -140,8 +168,10 @@ export default function SetupPage() {
                       size="lg"
                       onClick={startInterview}
                       className="px-8"
+                      loading={creatingRoom}
+                      disabled={creatingRoom}
                     >
-                      Begin Interview
+                      {creatingRoom ? "Creating Room..." : "Begin Interview"}
                     </Button>
                   )}
                 </>
