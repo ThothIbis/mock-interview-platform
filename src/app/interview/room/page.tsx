@@ -160,7 +160,7 @@ export default function InterviewRoom() {
                   <li>• Look at the camera, not the screen</li>
                   <li>• Speak clearly and at normal pace</li>
                   <li>• Use the STAR method for examples</li>
-                  <li>• It's okay to pause and think</li>
+                  <li>• It&apos;s okay to pause and think</li>
                 </ul>
               </Card>
             </Stack>
