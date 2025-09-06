@@ -62,17 +62,17 @@ export default function ConfigTestPage() {
           <Stack gap="sm">
             <div>
               <Text size="sm" c="dimmed">App URL</Text>
-              <Text family="monospace" size="sm">{config.app.url}</Text>
+              <Text size="sm" className="font-mono">{config.app.url}</Text>
             </div>
             
             <div>
               <Text size="sm" c="dimmed">WebSocket URL</Text>
-              <Text family="monospace" size="sm">{config.app.websocketUrl}</Text>
+              <Text size="sm" className="font-mono">{config.app.websocketUrl}</Text>
             </div>
             
             <div>
               <Text size="sm" c="dimmed">Daily Domain</Text>
-              <Text family="monospace" size="sm">{config.daily.domain || "Not configured"}</Text>
+              <Text size="sm" className="font-mono">{config.daily.domain || "Not configured"}</Text>
             </div>
           </Stack>
         </Card>
