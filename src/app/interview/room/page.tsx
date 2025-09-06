@@ -1,10 +1,10 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { Container, Text, Stack, Card, Group, Button, Badge, Avatar, Alert } from "@mantine/core";
+import { useState, useEffect, Suspense } from "react";
+import { Container, Text, Stack, Card, Group, Button, Badge, Avatar, Alert, Loader } from "@mantine/core";
 import { useRouter, useSearchParams } from "next/navigation";
 
-export default function InterviewRoom() {
+function InterviewRoomContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   
@@ -187,5 +187,20 @@ export default function InterviewRoom() {
         </div>
       </Stack>
     </Container>
+  );
+}
+
+export default function InterviewRoom() {
+  return (
+    <Suspense fallback={
+      <Container size="lg" className="min-h-screen flex items-center justify-center">
+        <Stack align="center" gap="md">
+          <Loader size="lg" />
+          <Text>Loading interview room...</Text>
+        </Stack>
+      </Container>
+    }>
+      <InterviewRoomContent />
+    </Suspense>
   );
 }
