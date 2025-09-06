@@ -10,7 +10,10 @@
       "Bash(npm run build:*)",
       "Bash(timeout 10s npm run dev)",
       "Bash(git push:*)",
-      "Bash(git init:*)"
+      "Bash(git init:*)",
+      "Bash(git branch:*)",
+      "Bash(git remote add:*)",
+      "Bash(curl:*)"
     ],
     "deny": [],
     "ask": []
